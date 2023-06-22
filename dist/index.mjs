@@ -217,9 +217,9 @@ var viteTagEntryPath = (resolveAlias, entrypointsDir, snippetName) => {
 };
 var viteEntryTag = (entryPaths, tag, isFirstEntry = false) => `{% ${!isFirstEntry ? "els" : ""}if ${entryPaths.map((entryName) => `path == "${entryName}"`).join(" or ")} %}
   ${tag}`;
-var preloadScriptTag = (fileName) => `<link rel="modulepreload" href="{{ '${fileName}' | asset_url | split: '?' | first }}" crossorigin="anonymous">`;
-var scriptTag = (fileName) => `<script src="{{ '${fileName}' | asset_url | split: '?' | first }}" type="module" crossorigin="anonymous"></script>`;
-var stylesheetTag = (fileName) => `{{ '${fileName}' | asset_url | split: '?' | first | stylesheet_tag: preload: preload_stylesheet }}`;
+var preloadScriptTag = (fileName) => `<link rel="modulepreload" href="{{ '${fileName}' | asset_url }}" crossorigin="anonymous">`;
+var scriptTag = (fileName) => `<script src="{{ '${fileName}' | asset_url }}" type="module" crossorigin="anonymous"></script>`;
+var stylesheetTag = (fileName) => `{{ '${fileName}' | asset_url | stylesheet_tag: preload: preload_stylesheet }}`;
 var viteTagSnippetDev = (assetHost, entrypointsDir, reactPlugin) => `{% liquid
   assign path_prefix = path | slice: 0
   if path_prefix == '/'
