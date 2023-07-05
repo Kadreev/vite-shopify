@@ -51,7 +51,11 @@ var resolveOptions = (options) => {
     snippetFile
   };
 };
+function getRandomVersion() {
+  return Math.floor(Math.random() * (9999999 - 1000000) + 1000000);
+}
 
+const version = getRandomVersion();
 // src/config.ts
 var import_node_path2 = __toESM(require("path"));
 var import_vite2 = require("vite");
@@ -61,6 +65,14 @@ var debug = (0, import_debug.default)("vite-plugin-shopify:config");
 function shopifyConfig(options) {
   return {
     name: "vite-plugin-shopify-config",
+    async load(id) {
+      if (id.startsWith(process.cwd()) && (id.endsWith('.js') || id.endsWith('.vue'))) {
+        return `${id}?v=${version}`;
+      }
+    },
+    async renderChunk(code) {
+      return code.replace(/(from\s+['"])(.+?)(\.js)(['"])/g, `$1$2$3?v=${version}$4`);
+    },
     config(config) {
       const host = config.server?.host ?? "localhost";
       const port = config.server?.port ?? 5173;
