@@ -61,8 +61,6 @@ var import_node_path2 = __toESM(require("path"));
 var import_vite2 = require("vite");
 var import_fast_glob = __toESM(require("fast-glob"));
 var import_debug = __toESM(require("debug"));
-var fs = require('fs');
-var path = require('path');
 var debug = (0, import_debug.default)("vite-plugin-shopify:config");
 function shopifyConfig(options) {
   return {
