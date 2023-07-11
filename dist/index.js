@@ -61,17 +61,23 @@ var import_node_path2 = __toESM(require("path"));
 var import_vite2 = require("vite");
 var import_fast_glob = __toESM(require("fast-glob"));
 var import_debug = __toESM(require("debug"));
+var fs = require('fs');
+var path = require('path');
 var debug = (0, import_debug.default)("vite-plugin-shopify:config");
 function shopifyConfig(options) {
   return {
     name: "vite-plugin-shopify-config",
-    async load(id) {
-      if (id.startsWith(process.cwd()) && (id.endsWith('.js') || id.endsWith('.vue'))) {
-        return `${id}?v=${version}`;
-      }
-    },
+    
     async renderChunk(code) {
-      return code.replace(/(from\s+['"])(.+?)(\.js)(['"])/g, `$1$2$3?v=${version}$4`);
+      const version = getRandomVersion();
+    
+      // Handle static imports
+      let updatedCode = code.replace(/(from\s+['"])(.+?)(\.js)(['"])/g, `$1$2$3?v=${version}$4`);
+    
+      // Handle dynamic imports
+      updatedCode = updatedCode.replace(/import\((['"])(.+?)(['"])\)/g, `import($1$2?v=${version}$3)`);
+      
+      return updatedCode;
     },
     config(config) {
       const host = config.server?.host ?? "localhost";
